@@ -2,6 +2,8 @@ package com.ahsen.hava.ui.trip
 
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -15,6 +17,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -54,6 +57,7 @@ import com.ahsen.hava.ui.theme.CardSurface
 import com.ahsen.hava.ui.theme.CoolBlue
 import com.ahsen.hava.ui.theme.GlassBorder
 import com.ahsen.hava.ui.theme.GlassFill
+import com.ahsen.hava.ui.theme.HavaNavy
 import com.ahsen.hava.ui.theme.HavaYellow
 import com.ahsen.hava.ui.theme.TextPrimary
 import com.ahsen.hava.ui.theme.TextSecondary
@@ -94,6 +98,10 @@ internal fun RouteOptions(
                 // Puanlama ve "ne zaman çıkmalıyım?" ViewModel'de hesaplanır; ekran sadece gösterir.
                 val tripPlan = plan ?: return@LazyColumn
                 val recommendation = tripPlan.recommendation
+                // Google Maps'teki gibi: en üstte bütün türler ve süreleri tek satırda.
+                if (recommendation.options.isNotEmpty()) {
+                    item(key = "modes") { ModeSummaryRow(options = recommendation.options, best = recommendation.best) }
+                }
                 recommendation.best?.let { best ->
                     item(key = "recommendation") {
                         RecommendationCard(best = best, headline = recommendation.headline.text(), departureOffset = departureOffset)
@@ -245,6 +253,38 @@ private fun OptionCard(option: ModeOption, isBest: Boolean, alternatives: Int, i
                 )
             }
             isWeatherLoading -> Text(stringResource(R.string.route_weather_loading), style = MaterialTheme.typography.bodySmall, color = TextSecondary)
+        }
+    }
+}
+
+/** Ulaşım türleri ve süreleri yan yana. Önerilen tür sarı çerçeveli. */
+@Composable
+private fun ModeSummaryRow(options: List<ModeOption>, best: ModeOption?) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .horizontalScroll(rememberScrollState()),
+        horizontalArrangement = Arrangement.spacedBy(8.dp),
+    ) {
+        options.sortedBy { it.mode.ordinal }.forEach { option ->
+            val isBest = option == best
+            Row(
+                modifier = Modifier
+                    .clip(RoundedCornerShape(20.dp))
+                    .background(if (isBest) HavaYellow else CardSurface)
+                    .border(1.dp, if (isBest) HavaYellow else GlassBorder, RoundedCornerShape(20.dp))
+                    .padding(horizontal = 12.dp, vertical = 8.dp),
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                TravelModeIcon(mode = option.mode, size = 18.dp, color = if (isBest) HavaNavy else option.mode.accent())
+                Spacer(Modifier.width(6.dp))
+                Text(
+                    formatMinutes(option.durationMinutes),
+                    style = MaterialTheme.typography.labelLarge,
+                    fontWeight = FontWeight.SemiBold,
+                    color = if (isBest) HavaNavy else TextPrimary,
+                )
+            }
         }
     }
 }
