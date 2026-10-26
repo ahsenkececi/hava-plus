@@ -3,7 +3,7 @@ package com.ahsen.hava.ui.trip
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.horizontalScroll
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -14,10 +14,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -27,6 +25,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -35,12 +34,16 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.ahsen.hava.R
+import com.ahsen.hava.domain.logic.DepartureAdvice
 import com.ahsen.hava.domain.logic.ModeOption
 import com.ahsen.hava.domain.logic.RideHazard
 import com.ahsen.hava.domain.model.RouteWeather
+import com.ahsen.hava.domain.model.TravelMode
 import com.ahsen.hava.domain.model.TripRoutes
 import com.ahsen.hava.domain.usecase.TripPlan
 import com.ahsen.hava.ui.BottomBarSpace
@@ -56,30 +59,36 @@ import com.ahsen.hava.ui.component.GlassCard
 import com.ahsen.hava.ui.theme.CardSurface
 import com.ahsen.hava.ui.theme.CoolBlue
 import com.ahsen.hava.ui.theme.GlassBorder
-import com.ahsen.hava.ui.theme.GlassFill
 import com.ahsen.hava.ui.theme.HavaNavy
 import com.ahsen.hava.ui.theme.HavaYellow
 import com.ahsen.hava.ui.theme.TextPrimary
 import com.ahsen.hava.ui.theme.TextSecondary
 import com.ahsen.hava.ui.theme.WarmOrange
+import java.time.LocalTime
+import java.time.format.DateTimeFormatter
 
 /*
- * Yolculuk+ alt kısmı: önerilen seçenek, bütün ulaşım seçenekleri ve yol boyunca hava şeridi.
+ * Yolculuk+ alt kısmı, Google Maps düzeninde:
+ *   1. ulaşım türü sekmeleri (süreleriyle)
+ *   2. seçili türün detay kartı (süre, varış, neden, yol boyunca hava, ne zaman çıkmalıyım)
+ *   3. diğer türler sade bir liste
  */
 
-/** İki nokta seçilince: önerilen seçenek, çıkış saati önerisi ve bütün ulaşım seçenekleri. */
+/** İki nokta seçilince: tür sekmeleri, seçili türün detayı ve diğer türler. */
 @Composable
 internal fun RouteOptions(
     routes: LoadState<TripRoutes>?,
     plan: TripPlan?,
+    selectedMode: TravelMode?,
     isWeatherLoading: Boolean,
     departureOffset: Int,
+    onModeSelect: (TravelMode) -> Unit,
     onDepartureChange: (Int) -> Unit,
     onRetry: () -> Unit,
 ) {
     LazyColumn(
         contentPadding = PaddingValues(start = 16.dp, end = 16.dp, bottom = BottomBarSpace),
-        verticalArrangement = Arrangement.spacedBy(10.dp),
+        verticalArrangement = Arrangement.spacedBy(12.dp),
     ) {
         when (routes) {
             null, LoadState.Loading -> item(key = "loading") {
@@ -98,27 +107,28 @@ internal fun RouteOptions(
                 // Puanlama ve "ne zaman çıkmalıyım?" ViewModel'de hesaplanır; ekran sadece gösterir.
                 val tripPlan = plan ?: return@LazyColumn
                 val recommendation = tripPlan.recommendation
-                // Google Maps'teki gibi: en üstte bütün türler ve süreleri tek satırda.
-                if (recommendation.options.isNotEmpty()) {
-                    item(key = "modes") { ModeSummaryRow(options = recommendation.options, best = recommendation.best) }
+                val best = recommendation.best ?: return@LazyColumn
+                // Kullanıcı bir sekme seçmediyse önerilen tür seçilidir.
+                val selected = recommendation.options.firstOrNull { it.mode == selectedMode } ?: best
+
+                item(key = "modes") {
+                    ModeTabs(options = recommendation.options, best = best, selected = selected, onSelect = onModeSelect)
                 }
-                recommendation.best?.let { best ->
-                    item(key = "recommendation") {
-                        RecommendationCard(best = best, headline = recommendation.headline.text(), departureOffset = departureOffset)
-                    }
-                }
-                tripPlan.departureAdvice?.let { advice ->
-                    item(key = "departure") {
-                        DepartureCard(advice = advice, selectedOffset = departureOffset, onSelect = onDepartureChange)
-                    }
-                }
-                items(recommendation.options, key = { it.mode.name }) { option ->
-                    OptionCard(
-                        option = option,
-                        isBest = option == recommendation.best,
-                        alternatives = (trip.byMode[option.mode]?.size ?: 1) - 1,
+                item(key = "detail") {
+                    ModeDetailCard(
+                        option = selected,
+                        headline = if (selected == best) recommendation.headline.text() else null,
+                        alternatives = (trip.byMode[selected.mode]?.size ?: 1) - 1,
+                        departureOffset = departureOffset,
+                        // "Ne zaman çıkmalıyım?" açıkta giden tür için hesaplanır; o tür seçiliyse gösterilir.
+                        advice = tripPlan.departureAdvice?.takeIf { it.mode == selected.mode },
+                        onDepartureChange = onDepartureChange,
                         isWeatherLoading = isWeatherLoading,
                     )
+                }
+                val others = recommendation.options.filter { it != selected }
+                if (others.isNotEmpty()) {
+                    item(key = "others") { OtherModesList(options = others, onSelect = onModeSelect) }
                 }
                 if (trip.unavailable.isNotEmpty()) {
                     item(key = "unavailable") {
@@ -135,17 +145,69 @@ internal fun RouteOptions(
     }
 }
 
-/** En üstte: önerilen seçenek ve "neden?" cümlesi. */
+/** Ulaşım türü sekmeleri: ikon + süre. Seçili sekme sarı; önerilen türün üstünde "ÖNERİLEN" yazar. */
 @Composable
-private fun RecommendationCard(best: ModeOption, headline: String, departureOffset: Int) {
-    GlassCard(modifier = Modifier.fillMaxWidth(), borderColor = HavaYellow, fill = SolidColor(CardSurface)) {
+private fun ModeTabs(options: List<ModeOption>, best: ModeOption, selected: ModeOption, onSelect: (TravelMode) -> Unit) {
+    Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+        options.sortedBy { it.mode.ordinal }.forEach { option ->
+            val isSelected = option == selected
+            val shape = RoundedCornerShape(16.dp)
+            Column(
+                modifier = Modifier
+                    .weight(1f)
+                    .clip(shape)
+                    .background(if (isSelected) HavaYellow else CardSurface)
+                    .border(1.dp, if (isSelected) HavaYellow else GlassBorder, shape)
+                    .selectable(selected = isSelected, role = Role.Tab, onClick = { onSelect(option.mode) })
+                    .padding(vertical = 8.dp),
+                horizontalAlignment = Alignment.CenterHorizontally,
+            ) {
+                Text(
+                    text = if (option == best) stringResource(R.string.recommended_title) else "",
+                    style = MaterialTheme.typography.labelSmall,
+                    fontWeight = FontWeight.Bold,
+                    color = if (isSelected) HavaNavy else HavaYellow,
+                    maxLines = 1,
+                )
+                TravelModeIcon(mode = option.mode, size = 22.dp, color = if (isSelected) HavaNavy else option.mode.accent())
+                Text(
+                    formatMinutes(option.durationMinutes),
+                    modifier = Modifier.padding(top = 2.dp),
+                    style = MaterialTheme.typography.labelLarge,
+                    fontWeight = FontWeight.SemiBold,
+                    color = if (isSelected) HavaNavy else TextPrimary,
+                    maxLines = 1,
+                )
+            }
+        }
+    }
+}
+
+/** Seçili türün bütün ayrıntısı tek kartta. */
+@Composable
+private fun ModeDetailCard(
+    option: ModeOption,
+    headline: String?,
+    alternatives: Int,
+    departureOffset: Int,
+    advice: DepartureAdvice?,
+    onDepartureChange: (Int) -> Unit,
+    isWeatherLoading: Boolean,
+) {
+    val arrival = remember(departureOffset, option.durationMinutes) {
+        LocalTime.now().plusMinutes((departureOffset + option.durationMinutes).toLong()).format(CLOCK)
+    }
+    GlassCard(modifier = Modifier.fillMaxWidth(), fill = SolidColor(CardSurface)) {
         Row(verticalAlignment = Alignment.CenterVertically) {
+            TravelModeIcon(mode = option.mode, size = 20.dp, color = option.mode.accent())
             Text(
-                stringResource(R.string.recommended_title),
-                modifier = Modifier.weight(1f),
-                style = MaterialTheme.typography.labelLarge,
-                color = HavaYellow,
-                fontWeight = FontWeight.Bold,
+                option.mode.label(),
+                modifier = Modifier
+                    .weight(1f)
+                    .padding(start = 8.dp),
+                style = MaterialTheme.typography.titleMedium,
+                fontWeight = FontWeight.SemiBold,
+                color = TextPrimary,
             )
             Text(
                 text = if (departureOffset == 0) stringResource(R.string.departure_now) else stringResource(R.string.departure_after, departureOffsetText(departureOffset)),
@@ -153,83 +215,33 @@ private fun RecommendationCard(best: ModeOption, headline: String, departureOffs
                 color = TextSecondary,
             )
         }
-        Spacer(Modifier.height(8.dp))
-        Row(verticalAlignment = Alignment.CenterVertically) {
-            TravelModeIcon(mode = best.mode, size = 32.dp, color = HavaYellow)
-            Text(
-                text = best.mode.label(),
-                modifier = Modifier
-                    .weight(1f)
-                    .padding(start = 12.dp),
-                style = MaterialTheme.typography.headlineSmall,
-                fontWeight = FontWeight.Bold,
-                color = TextPrimary,
-            )
+        Spacer(Modifier.height(6.dp))
+        Row(verticalAlignment = Alignment.Bottom) {
+            Column(modifier = Modifier.weight(1f)) {
+                Text(formatMinutes(option.durationMinutes), style = MaterialTheme.typography.displaySmall, fontWeight = FontWeight.Light, color = TextPrimary)
+                Text(
+                    stringResource(R.string.trip_distance_arrival, formatKm(option.distanceKm), arrival),
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = TextSecondary,
+                )
+            }
             Column(horizontalAlignment = Alignment.End) {
-                Text(formatMinutes(best.durationMinutes), style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.Light, color = TextPrimary)
-                Text(formatKm(best.distanceKm), style = MaterialTheme.typography.labelLarge, fontWeight = FontWeight.SemiBold, color = TextSecondary)
-            }
-        }
-        Spacer(Modifier.height(8.dp))
-        Text(headline, style = MaterialTheme.typography.bodyLarge, color = TextPrimary)
-    }
-}
-
-/** Bir seçenek: ikon, süre, puan, gerekçeler ve yol boyunca hava şeridi. */
-@Composable
-private fun OptionCard(option: ModeOption, isBest: Boolean, alternatives: Int, isWeatherLoading: Boolean) {
-    val accent = option.mode.accent()
-    // Opak, sade kart; tür sadece ikonun renginden ayırt edilir. En iyisi sarı kenarlıkla işaretli.
-    GlassCard(
-        modifier = Modifier.fillMaxWidth(),
-        borderColor = if (isBest) HavaYellow.copy(alpha = 0.7f) else GlassBorder,
-        fill = SolidColor(CardSurface),
-    ) {
-        Row(verticalAlignment = Alignment.CenterVertically) {
-            Box(
-                modifier = Modifier
-                    .size(44.dp)
-                    .clip(CircleShape)
-                    .background(accent.copy(alpha = 0.16f)),
-                contentAlignment = Alignment.Center,
-            ) {
-                TravelModeIcon(mode = option.mode, size = 26.dp, color = accent)
-            }
-            Column(
-                modifier = Modifier
-                    .weight(1f)
-                    .padding(start = 12.dp),
-            ) {
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    Text(option.mode.label(), style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold, color = TextPrimary)
-                    Spacer(Modifier.width(8.dp))
-                    ScoreBadge(score = option.score)
-                    if (option.isEstimate) {
-                        Text(
-                            text = stringResource(R.string.estimate_badge),
-                            modifier = Modifier
-                                .padding(start = 8.dp)
-                                .clip(RoundedCornerShape(6.dp))
-                                .background(GlassFill)
-                                .padding(horizontal = 6.dp, vertical = 2.dp),
-                            style = MaterialTheme.typography.labelSmall,
-                            color = TextSecondary,
-                        )
-                    }
-                }
+                ScoreBadge(score = option.score)
                 Text(
                     text = if (alternatives > 0) stringResource(R.string.cost_with_alternatives, option.cost.label(), alternatives) else option.cost.label(),
                     style = MaterialTheme.typography.bodySmall,
                     color = TextSecondary,
                 )
-            }
-            // Süre ve gidilecek yol mesafesi yan yana değil alt alta: ikisi de bir bakışta okunur.
-            Column(horizontalAlignment = Alignment.End) {
-                Text(formatMinutes(option.durationMinutes), style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Light, color = TextPrimary)
-                Text(formatKm(option.distanceKm), style = MaterialTheme.typography.labelLarge, fontWeight = FontWeight.SemiBold, color = TextSecondary)
+                if (option.isEstimate) {
+                    Text(stringResource(R.string.estimate_badge), style = MaterialTheme.typography.labelSmall, color = TextSecondary)
+                }
             }
         }
-        Spacer(Modifier.height(10.dp))
+        headline?.let {
+            Spacer(Modifier.height(10.dp))
+            Text(it, style = MaterialTheme.typography.bodyLarge, color = TextPrimary)
+        }
+        Spacer(Modifier.height(8.dp))
         // Gerekçeler: "+6 dk · Yağmura 4 dk açıkta kalırsın · ..."
         option.reasons.forEach { reason ->
             Text(
@@ -241,7 +253,7 @@ private fun OptionCard(option: ModeOption, isBest: Boolean, alternatives: Int, i
         // Yol güvenliği (bisiklet/scooter): savrulma ve kayma riski
         option.hazards.forEach { hazard -> HazardRow(hazard) }
         val weather = option.weather
-        Spacer(Modifier.height(10.dp))
+        Spacer(Modifier.height(12.dp))
         when {
             weather != null && weather.points.isNotEmpty() -> {
                 RouteWeatherStrip(weather = weather)
@@ -254,40 +266,68 @@ private fun OptionCard(option: ModeOption, isBest: Boolean, alternatives: Int, i
             }
             isWeatherLoading -> Text(stringResource(R.string.route_weather_loading), style = MaterialTheme.typography.bodySmall, color = TextSecondary)
         }
+        advice?.let {
+            Spacer(Modifier.height(16.dp))
+            DepartureSection(advice = it, selectedOffset = departureOffset, onSelect = onDepartureChange)
+        }
     }
 }
 
-/** Ulaşım türleri ve süreleri yan yana. Önerilen tür sarı çerçeveli. */
+/** Seçili olmayan türler: Maps'teki gibi sade satırlar. Dokununca o tür seçilir. */
 @Composable
-private fun ModeSummaryRow(options: List<ModeOption>, best: ModeOption?) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .horizontalScroll(rememberScrollState()),
-        horizontalArrangement = Arrangement.spacedBy(8.dp),
-    ) {
-        options.sortedBy { it.mode.ordinal }.forEach { option ->
-            val isBest = option == best
+private fun OtherModesList(options: List<ModeOption>, onSelect: (TravelMode) -> Unit) {
+    GlassCard(modifier = Modifier.fillMaxWidth(), fill = SolidColor(CardSurface), contentPadding = 0.dp) {
+        options.forEachIndexed { index, option ->
+            if (index > 0) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(1.dp)
+                        .background(GlassBorder),
+                )
+            }
             Row(
                 modifier = Modifier
-                    .clip(RoundedCornerShape(20.dp))
-                    .background(if (isBest) HavaYellow else CardSurface)
-                    .border(1.dp, if (isBest) HavaYellow else GlassBorder, RoundedCornerShape(20.dp))
-                    .padding(horizontal = 12.dp, vertical = 8.dp),
+                    .fillMaxWidth()
+                    .clickable { onSelect(option.mode) }
+                    .padding(horizontal = 16.dp, vertical = 12.dp),
                 verticalAlignment = Alignment.CenterVertically,
             ) {
-                TravelModeIcon(mode = option.mode, size = 18.dp, color = if (isBest) HavaNavy else option.mode.accent())
-                Spacer(Modifier.width(6.dp))
-                Text(
-                    formatMinutes(option.durationMinutes),
-                    style = MaterialTheme.typography.labelLarge,
-                    fontWeight = FontWeight.SemiBold,
-                    color = if (isBest) HavaNavy else TextPrimary,
-                )
+                Box(
+                    modifier = Modifier
+                        .size(40.dp)
+                        .clip(CircleShape)
+                        .background(option.mode.accent().copy(alpha = 0.16f)),
+                    contentAlignment = Alignment.Center,
+                ) {
+                    TravelModeIcon(mode = option.mode, size = 22.dp, color = option.mode.accent())
+                }
+                Column(
+                    modifier = Modifier
+                        .weight(1f)
+                        .padding(start = 12.dp),
+                ) {
+                    Text(option.mode.label(), style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.SemiBold, color = TextPrimary)
+                    option.reasons.firstOrNull()?.let { reason ->
+                        Text(
+                            reason.text(),
+                            style = MaterialTheme.typography.bodySmall,
+                            color = if (reason.isRainWarning()) CoolBlue else TextSecondary,
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis,
+                        )
+                    }
+                }
+                Column(horizontalAlignment = Alignment.End) {
+                    Text(formatMinutes(option.durationMinutes), style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Light, color = TextPrimary)
+                    Text(formatKm(option.distanceKm), style = MaterialTheme.typography.labelMedium, color = TextSecondary)
+                }
             }
         }
     }
 }
+
+private val CLOCK: DateTimeFormatter = DateTimeFormatter.ofPattern("HH:mm")
 
 /** 100 üzerinden puan: yüksekse sarı. */
 @Composable

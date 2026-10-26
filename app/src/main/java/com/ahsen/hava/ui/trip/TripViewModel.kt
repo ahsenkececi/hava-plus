@@ -83,6 +83,10 @@ class TripViewModel(
     /** Her ulaşım türünün en iyi rotası için hava zaman çizelgesi. Rotalardan sonra, ayrıca yüklenir. */
     private val _timelines = MutableStateFlow<Map<TravelMode, RouteWeatherTimeline>>(emptyMap())
 
+    /** Kullanıcının seçtiği ulaşım sekmesi. null: önerilen tür gösterilir. */
+    private val _selectedMode = MutableStateFlow<TravelMode?>(null)
+    val selectedMode: StateFlow<TravelMode?> = _selectedMode.asStateFlow()
+
     /** Seçilen çıkış: şimdiden kaç dakika sonra. 0 = şimdi. */
     private val _departureOffset = MutableStateFlow(0)
     val departureOffset: StateFlow<Int> = _departureOffset.asStateFlow()
@@ -126,6 +130,7 @@ class TripViewModel(
         _routes.value = LoadState.Loading
         _timelines.value = emptyMap()
         _departureOffset.value = 0
+        _selectedMode.value = null
         _routes.value = try {
             val trip = planTrip.findRoutes(from, to)
             loadRouteWeather(trip)
@@ -151,6 +156,11 @@ class TripViewModel(
             }
             _isWeatherLoading.value = false
         }
+    }
+
+    /** Ulaşım sekmesine (ya da listedeki bir türe) dokunuldu. */
+    fun onModeSelect(mode: TravelMode) {
+        _selectedMode.value = mode
     }
 
     /** Zaman şeridinde bir çıkış saatine dokunuldu. */

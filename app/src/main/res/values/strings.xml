@@ -164,6 +164,7 @@
     <string name="route_weather_loading">Yol boyunca hava hesaplanıyor…</string>
     <string name="recommended_title">ÖNERİLEN</string>
     <string name="estimate_badge">TAHMİNİ</string>
+    <string name="trip_distance_arrival">%1$s · %2$s varış</string>
     <string name="score_out_of_100">%1$d/100</string>
     <string name="departure_now">Şimdi çıkış</string>
     <string name="departure_after">%1$s sonra çıkış</string>

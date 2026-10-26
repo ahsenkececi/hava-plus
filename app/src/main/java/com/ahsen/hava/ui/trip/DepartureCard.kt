@@ -23,7 +23,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -31,9 +30,6 @@ import com.ahsen.hava.R
 import com.ahsen.hava.domain.logic.DepartureAdvice
 import com.ahsen.hava.ui.common.departureMessageText
 import com.ahsen.hava.ui.common.departureOffsetText
-import com.ahsen.hava.ui.common.label
-import com.ahsen.hava.ui.component.GlassCard
-import com.ahsen.hava.ui.theme.CardSurface
 import com.ahsen.hava.ui.theme.CoolBlue
 import com.ahsen.hava.ui.theme.GlassBorder
 import com.ahsen.hava.ui.theme.GlassFill
@@ -43,14 +39,14 @@ import com.ahsen.hava.ui.theme.TextSecondary
 import java.time.format.DateTimeFormatter
 
 /**
- * "Ne zaman çıkmalıyım?" kartı: öneri cümlesi + 7 çıkış saatlik zaman şeridi.
+ * "Ne zaman çıkmalıyım?" bölümü (seçili türün detay kartının içinde): öneri cümlesi + 7 çıkış saatlik zaman şeridi.
  * Her kutu o saatte çıkarsan yağmurda kaç dakika kalacağını gösterir. Dokununca bütün
  * seçenekler o çıkış saatine göre yeniden hesaplanır.
  */
 @Composable
-internal fun DepartureCard(advice: DepartureAdvice, selectedOffset: Int, onSelect: (Int) -> Unit) {
+internal fun DepartureSection(advice: DepartureAdvice, selectedOffset: Int, onSelect: (Int) -> Unit) {
     val clock = remember { DateTimeFormatter.ofPattern("HH:mm") }
-    GlassCard(modifier = Modifier.fillMaxWidth(), fill = SolidColor(CardSurface)) {
+    Column(modifier = Modifier.fillMaxWidth()) {
         Row(verticalAlignment = Alignment.CenterVertically) {
             Text(
                 stringResource(R.string.departure_title),
@@ -59,8 +55,6 @@ internal fun DepartureCard(advice: DepartureAdvice, selectedOffset: Int, onSelec
                 color = HavaYellow,
                 fontWeight = FontWeight.Bold,
             )
-            TravelModeIcon(mode = advice.mode, size = 18.dp, color = TextSecondary)
-            Text(advice.mode.label(), modifier = Modifier.padding(start = 4.dp), style = MaterialTheme.typography.labelMedium, color = TextSecondary)
         }
         Spacer(Modifier.height(8.dp))
         Text(departureMessageText(advice.message), style = MaterialTheme.typography.bodyLarge, color = TextPrimary)

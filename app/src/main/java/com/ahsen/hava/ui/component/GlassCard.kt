@@ -15,6 +15,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.ahsen.hava.ui.theme.GlassBorder
 import com.ahsen.hava.ui.theme.GlassFill
@@ -25,6 +26,7 @@ import com.ahsen.hava.ui.theme.GlassFill
  * @param borderColor Seçili kartta sarı kenarlık için. Renk değişimi animasyonludur.
  * @param fill Kartın zemini. Varsayılan düz cam; önemli kartlar renkli bir gradyanla ayrışır.
  * @param onClick null ise kart tıklanamaz.
+ * @param contentPadding İç boşluk. Satırları kenardan kenara uzanan listelerde 0 verilir.
  */
 @Composable
 fun GlassCard(
@@ -32,6 +34,7 @@ fun GlassCard(
     borderColor: Color = GlassBorder,
     fill: Brush = SolidColor(GlassFill),
     onClick: (() -> Unit)? = null,
+    contentPadding: Dp = 16.dp,
     content: @Composable ColumnScope.() -> Unit,
 ) {
     val shape = RoundedCornerShape(24.dp)
@@ -42,7 +45,7 @@ fun GlassCard(
             .background(fill)
             .border(1.5.dp, animatedBorder, shape)
             .then(if (onClick != null) Modifier.clickable(onClick = onClick) else Modifier)
-            .padding(16.dp),
+            .padding(contentPadding),
         content = content,
     )
 }

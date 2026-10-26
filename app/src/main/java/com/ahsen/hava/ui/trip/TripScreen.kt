@@ -44,6 +44,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.ahsen.hava.R
 import com.ahsen.hava.domain.model.Place
 import com.ahsen.hava.domain.model.Routine
+import com.ahsen.hava.domain.model.TravelMode
 import com.ahsen.hava.domain.model.TripRoutes
 import com.ahsen.hava.domain.usecase.TripPlan
 import com.ahsen.hava.ui.LoadState
@@ -76,6 +77,7 @@ fun TripRoute(
     val plan by viewModel.plan.collectAsStateWithLifecycle()
     val isWeatherLoading by viewModel.isWeatherLoading.collectAsStateWithLifecycle()
     val departureOffset by viewModel.departureOffset.collectAsStateWithLifecycle()
+    val selectedMode by viewModel.selectedMode.collectAsStateWithLifecycle()
     val routine by viewModel.routine.collectAsStateWithLifecycle()
     val routineEditor by viewModel.routineEditor.collectAsStateWithLifecycle()
     val context = LocalContext.current
@@ -123,6 +125,8 @@ fun TripRoute(
         plan = plan,
         isWeatherLoading = isWeatherLoading,
         departureOffset = departureOffset,
+        selectedMode = selectedMode,
+        onModeSelect = viewModel::onModeSelect,
         onDepartureChange = viewModel::onDepartureChange,
         onRetryRoutes = viewModel::onRetryRoutes,
         onBack = onBack,
@@ -160,6 +164,8 @@ fun TripScreen(
     plan: TripPlan?,
     isWeatherLoading: Boolean,
     departureOffset: Int,
+    selectedMode: TravelMode?,
+    onModeSelect: (TravelMode) -> Unit,
     onDepartureChange: (Int) -> Unit,
     onRetryRoutes: () -> Unit,
     onBack: (() -> Unit)?,
@@ -232,8 +238,10 @@ fun TripScreen(
                     RouteOptions(
                         routes = routes,
                         plan = plan,
+                        selectedMode = selectedMode,
                         isWeatherLoading = isWeatherLoading,
                         departureOffset = departureOffset,
+                        onModeSelect = onModeSelect,
                         onDepartureChange = onDepartureChange,
                         onRetry = onRetryRoutes,
                     )
