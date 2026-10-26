@@ -1,0 +1,277 @@
+<resources>
+    <string name="app_name">Hava+</string>
+    <string name="header_subtitle">Şehrini ara, gökyüzünü gör</string>
+    <string name="search_hint">Şehir ara…</string>
+    <string name="action_clear">Temizle</string>
+    <string name="action_retry">Tekrar dene</string>
+    <string name="popular_title">Popüler şehirler</string>
+    <string name="result_count">%1$d şehir bulundu</string>
+    <string name="empty_title">Şehir bulunamadı</string>
+    <string name="empty_message">Yazımı kontrol et ya da başka bir şehir dene.</string>
+    <string name="action_back">Geri</string>
+    <string name="forecast_empty">Tahmin bulunamadı</string>
+    <string name="high_low">En yüksek %1$s · En düşük %2$s</string>
+    <string name="detail_feels_like">Hissedilen</string>
+    <string name="detail_humidity">Nem</string>
+    <string name="detail_wind">Rüzgâr</string>
+    <string name="section_hourly">Saatlik tahmin</string>
+    <string name="section_daily">7 günlük tahmin</string>
+    <string name="now">Şimdi</string>
+    <string name="today">Bugün</string>
+    <string name="tomorrow">Yarın</string>
+
+    <!-- Ana sayfa: konum kartı ve favoriler -->
+    <string name="section_my_location">Konumunda şimdi</string>
+    <string name="section_favorites">Favorilerim</string>
+    <string name="cd_my_location">Bulunduğun yer</string>
+    <string name="local_loading">Konumun bulunuyor…</string>
+    <string name="local_needs_permission">Bulunduğun yerin havasını görmek için dokun</string>
+    <string name="local_failed">%1$s Tekrar denemek için dokun.</string>
+    <string name="feels_like_value">Hissedilen %1$d°</string>
+    <!-- Y = en yüksek, D = en düşük (Apple Hava'daki H/L karşılığı) -->
+    <string name="high_low_short">Y:%1$d° D:%2$d°</string>
+    <!-- Tahmin ekranı: saatlik eğri (ekran okuyucu için grafiğin özeti) -->
+    <string name="hourly_chart_cd">Önümüzdeki saatlerde sıcaklık en yüksek %1$d°, en düşük %2$d°</string>
+    <!-- Tahmin ekranı: önümüzdeki 2 saat yağış -->
+    <string name="next_two_hours">Önümüzdeki 2 saat</string>
+    <string name="rain_peak">En yoğun anında %1$s yağış</string>
+    <string name="rain_chart_cd">Önümüzdeki 2 saatin 15 dakikalık yağış grafiği</string>
+    <string name="rain_light">hafif</string>
+    <string name="rain_moderate">orta şiddetli</string>
+    <string name="rain_heavy">kuvvetli</string>
+    <string name="axis_30_min">30 dk</string>
+    <string name="axis_1_hour">1 sa</string>
+    <string name="axis_90_min">1,5 sa</string>
+    <string name="axis_2_hours">2 sa</string>
+    <!-- Tahmin ekranı: ikinci sıra detaylar -->
+    <string name="detail_pressure">Basınç</string>
+    <string name="unit_hpa">hPa</string>
+    <string name="detail_visibility">Görüş</string>
+    <string name="detail_dew_point">Çiy noktası</string>
+    <string name="detail_cloud">Bulut</string>
+    <string name="visibility_fog">Sisli</string>
+    <string name="visibility_haze">Puslu</string>
+    <string name="visibility_good">İyi</string>
+    <string name="visibility_excellent">Çok iyi</string>
+    <string name="dew_dry">Kuru</string>
+    <string name="dew_comfortable">Rahat</string>
+    <string name="dew_humid">Nemli</string>
+    <string name="dew_oppressive">Bunaltıcı</string>
+    <!-- Yolculuk+: yol güvenliği (bisiklet/scooter) -->
+    <string name="hazard_at_start">yolun başında</string>
+    <string name="hazard_at_minute">%1$d. dakikada</string>
+    <string name="hazard_crosswind">Yandan %1$d km/s rüzgâr, %2$s: savrulmaya dikkat</string>
+    <string name="hazard_crosswind_severe">Yandan %1$d km/s sert rüzgâr, %2$s: iki tekerlekli için tehlikeli</string>
+    <string name="hazard_slippery">Kuru günlerin ardından ilk yağmur, %1$s: yol çok kaygan olabilir</string>
+    <string name="cd_hazard">Yol güvenliği uyarısı</string>
+
+    <!-- ===== Genel ===== -->
+    <string name="brand_name">Hava</string>
+    <string name="tagline">Havaya göre yol al</string>
+    <string name="tab_weather">Hava</string>
+    <string name="tab_trip">Yolculuk</string>
+    <string name="cd_add_favorite">Favorilere ekle</string>
+    <string name="cd_remove_favorite">Favorilerden çıkar</string>
+    <string name="bullet_item">•  %1$s</string>
+    <string name="percent_value">%%%1$d</string>
+    <string name="my_location">Konumum</string>
+    <string name="my_location_detail">Şu an bulunduğun yer</string>
+    <string name="locating">Konum aranıyor…</string>
+
+    <!-- ===== Birimler ve süreler ===== -->
+    <string name="duration_minutes">%1$d dk</string>
+    <string name="duration_hours">%1$d sa</string>
+    <string name="duration_hours_minutes">%1$d sa %2$d dk</string>
+    <string name="duration_hours_fraction">%1$d,%2$d sa</string>
+    <string name="distance_meters">%1$d m</string>
+    <string name="distance_km">%1$.1f km</string>
+    <string name="distance_km_whole">%1$d km</string>
+    <string name="unit_kmh_short">km/s</string>
+
+    <!-- ===== Hata mesajları ===== -->
+    <string name="error_network">İnternet bağlantını kontrol et.</string>
+    <!-- %1$s: servisin adı (service_*) -->
+    <string name="error_server">%1$s şu an cevap vermiyor.</string>
+    <string name="error_unexpected">Bir şeyler ters gitti. Tekrar dene.</string>
+    <string name="error_location_not_found">Konum bulunamadı. Konum servisinin açık olduğundan emin ol.</string>
+    <string name="service_generic">Sunucu</string>
+    <string name="service_weather">Hava servisi</string>
+    <string name="service_routing">Rota servisi</string>
+    <string name="service_places">Adres servisi</string>
+
+    <!-- ===== Hava durumları (WMO kodları) ===== -->
+    <string name="condition_clear">Açık</string>
+    <string name="condition_mainly_clear">Az bulutlu</string>
+    <string name="condition_partly_cloudy">Parçalı bulutlu</string>
+    <string name="condition_overcast">Kapalı</string>
+    <string name="condition_fog">Sisli</string>
+    <string name="condition_drizzle">Çisenti</string>
+    <string name="condition_rain">Yağmurlu</string>
+    <string name="condition_snow">Karlı</string>
+    <string name="condition_rain_showers">Sağanak yağış</string>
+    <string name="condition_snow_showers">Kar sağanağı</string>
+    <string name="condition_thunderstorm">Gök gürültülü fırtına</string>
+    <string name="condition_unknown">Bilinmiyor</string>
+
+    <!-- ===== UV ve rüzgâr yönü ===== -->
+    <string name="detail_uv">UV</string>
+    <string name="uv_low">Düşük</string>
+    <string name="uv_moderate">Orta</string>
+    <string name="uv_high">Yüksek</string>
+    <string name="uv_very_high">Çok yüksek</string>
+    <string name="uv_extreme">Aşırı</string>
+    <!-- Rüzgârın geldiği yön: K = kuzey, KD = kuzeydoğu ... -->
+    <string name="compass_n">K</string>
+    <string name="compass_ne">KD</string>
+    <string name="compass_e">D</string>
+    <string name="compass_se">GD</string>
+    <string name="compass_s">G</string>
+    <string name="compass_sw">GB</string>
+    <string name="compass_w">B</string>
+    <string name="compass_nw">KB</string>
+
+    <!-- ===== Yağmur durumu ===== -->
+    <string name="rain_for_a_while">Yağmur yağıyor, en az 2 saat sürecek gibi.</string>
+    <!-- %1$s: süre ("30 dk") -->
+    <string name="rain_stops_in">Yağmur yağıyor, yaklaşık %1$s sonra diniyor.</string>
+    <string name="rain_starts_soon">Yağmur birkaç dakika içinde başlıyor</string>
+    <string name="rain_starts_in">Yağmur %1$s sonra başlıyor</string>
+    <!-- %1$s: rain_starts_*, %2$s: süre -->
+    <string name="rain_lasts_about">%1$s, yaklaşık %2$s sürecek.</string>
+    <string name="rain_lasts_at_least">%1$s, en az %2$s sürecek.</string>
+    <!-- %1$s: saat ("17:00"), %2$d: ihtimal -->
+    <string name="rain_expected_around">Yağmur saat %1$s civarı bekleniyor (%%%2$d).</string>
+
+    <!-- ===== Tahmin ekranı ===== -->
+    <string name="section_sun">Güneş</string>
+    <string name="sunrise">Gün doğumu</string>
+    <string name="sunset">Gün batımı</string>
+    <string name="sunset_in">Gün batımına %1$s</string>
+    <string name="daylight_length">Gün ışığı %1$s sürüyor</string>
+
+    <!-- ===== Yolculuk+ ===== -->
+    <string name="trip_title">Yolculuk</string>
+    <string name="trip_from">Nereden</string>
+    <string name="trip_to">Nereye</string>
+    <string name="trip_to_hint">Nereye gidiyorsun?</string>
+    <string name="cd_swap">Yer değiştir</string>
+    <string name="place_search_hint">Bir adres, bina, durak ya da semt yaz.</string>
+    <string name="place_search_min_chars">En az 3 harf yaz.</string>
+    <string name="place_not_found">Yer bulunamadı. Farklı yazmayı dene.</string>
+    <string name="route_not_found">Bu iki nokta arasında rota bulunamadı.</string>
+    <!-- %1$s: alınamayan ulaşım türleri ("Yürüyüş, Bisiklet") -->
+    <string name="route_unavailable">%1$s rotası şu an alınamadı.</string>
+    <string name="route_weather_loading">Yol boyunca hava hesaplanıyor…</string>
+    <string name="recommended_title">ÖNERİLEN</string>
+    <string name="estimate_badge">TAHMİNİ</string>
+    <string name="score_out_of_100">%1$d/100</string>
+    <string name="departure_now">Şimdi çıkış</string>
+    <string name="departure_after">%1$s sonra çıkış</string>
+    <!-- %1$s: maliyet ("Ücretsiz"), %2$d: alternatif rota sayısı -->
+    <string name="cost_with_alternatives">%1$s · +%2$d alternatif rota</string>
+
+    <string name="mode_walk">Yürüyüş</string>
+    <string name="mode_bike">Bisiklet</string>
+    <string name="mode_car">Araba</string>
+    <string name="mode_transit">Toplu taşıma</string>
+    <!-- Cümle içinde: "... ama bisiklet ile 12 dk yağmurda kalırdın" -->
+    <string name="mode_walk_inline">yürüyüş</string>
+    <string name="mode_bike_inline">bisiklet</string>
+    <string name="mode_car_inline">araba</string>
+    <string name="mode_transit_inline">toplu taşıma</string>
+    <string name="cost_free">Ücretsiz</string>
+    <string name="cost_ticket">Bilet</string>
+    <string name="cost_fuel">Yakıt + park</string>
+
+    <!-- Öneri gerekçeleri -->
+    <string name="reason_fastest">En hızlı seçenek</string>
+    <string name="reason_slower_by">+%1$d dk</string>
+    <string name="reason_wet_for">Yağmura %1$d dk açıkta kalırsın</string>
+    <string name="reason_dry_all_along">Yol boyunca kuru</string>
+    <string name="reason_strong_wind">Rüzgâr %1$d km/s, pedal çevirmek zorlaşır</string>
+    <string name="reason_cold">Hissedilen %1$d°, soğuk</string>
+    <string name="reason_hot">Hissedilen %1$d°, sıcak</string>
+    <string name="reason_long_walk">Uzun bir yürüyüş</string>
+    <string name="reason_long_ride">Uzun bir bisiklet yolu</string>
+    <string name="reason_sheltered">Yağmurdan etkilenmezsin</string>
+    <string name="reason_car_overhead">Park ve araca yürüme için +%1$d dk eklendi, trafik hariç</string>
+    <string name="reason_transit_estimate">Tahmini: durağa yürüme ve bekleme dahil</string>
+    <string name="reason_transit_walk_wet">Durak yolunda %1$d dk yağmur</string>
+    <string name="reason_transit_walk_dry">Durak yolunda kuru</string>
+
+    <!-- Öneri başlığı. %1$s: önerilen tür -->
+    <string name="headline_no_options">Seçenek bulunamadı.</string>
+    <string name="headline_fastest_comfortable">%1$s hem en hızlı hem de hava açısından en rahat seçenek.</string>
+    <string name="headline_fastest_wet">%1$s en hızlı seçenek, ama %2$d dk yağmura hazırlıklı ol.</string>
+    <!-- %2$d: fazladan dakika, %3$s: en hızlı tür (küçük harf), %4$d: o türde yağmurdaki dakika -->
+    <string name="headline_slower_drier">%1$s %2$d dk daha uzun, ama %3$s ile %4$d dk yağmurda kalırdın.</string>
+    <string name="headline_slower_balanced">%1$s %2$d dk daha uzun, ama süre, hava ve maliyet dengesinde en iyisi.</string>
+
+    <!-- Yol boyunca hava -->
+    <string name="route_dry">Yol boyunca kuru</string>
+    <string name="route_dry_risky">Yol boyunca kuru (yağış ihtimali %%%1$d)</string>
+    <string name="route_rain_all_along">Yolun tamamında yağmur</string>
+    <string name="route_rain_first">İlk %1$d dk yağmur</string>
+    <string name="route_rain_last">Son %1$d dk yağmur</string>
+    <string name="route_rain_after">%1$d. dakikadan sonra %2$d dk yağmur</string>
+    <!-- %1$s: yağmur özeti, %2$d: hissedilen sıcaklık -->
+    <string name="route_summary">%1$s · hissedilen %2$d°</string>
+
+    <!-- Ne zaman çıkmalıyım? -->
+    <string name="departure_title">NE ZAMAN ÇIKMALIYIM?</string>
+    <string name="departure_dry_two_hours">Önümüzdeki 2 saat boyunca bu yolda yağmur görünmüyor.</string>
+    <string name="departure_leave_now">Şimdi çıkarsan kuru varırsın. %1$s sonra çıkarsan yağmura yakalanırsın.</string>
+    <!-- %1$s: kaç dk sonra, %2$s: saat, %3$d: şimdi çıkılırsa yağmurdaki dakika -->
+    <string name="departure_wait_dry">%1$s sonra, saat %2$s gibi çıkarsan kuru varırsın. Şimdi çıkarsan %3$d dk yağmurda kalırsın.</string>
+    <string name="departure_wait_less">%1$s sonra, saat %2$s gibi çıkarsan yağmur %3$d dk yerine %4$d dk.</string>
+    <string name="departure_rain_not_stop">Önümüzdeki 2 saatte yağmur dinmiyor gibi. Daha korunaklı bir ulaşım seçmek iyi olabilir.</string>
+    <string name="slot_dry">kuru</string>
+    <string name="slot_wet_minutes">%1$d dk</string>
+
+    <!-- ===== Rutinim (bildirim) ===== -->
+    <string name="routine_channel_name">Rutinim</string>
+    <string name="routine_channel_description">Düzenli yolculuğunda hava ya da yol için dikkat etmen gereken bir şey olduğunda, çıkıştan önce haber verir.</string>
+    <string name="routine_notification_title">%1$s · %2$s yolculuğun</string>
+    <string name="routine_alert_rain">%1$s ile %2$d dk yağmura yakalanırsın.</string>
+    <string name="routine_shift_earlier_dry">%1$d dk erken çıkarsan kuru kalırsın.</string>
+    <string name="routine_shift_earlier_less">%1$d dk erken çıkarsan yağmur %2$d dk\'ya iner.</string>
+    <string name="routine_shift_later_dry">%1$d dk geç çıkarsan kuru kalırsın.</string>
+    <string name="routine_shift_later_less">%1$d dk geç çıkarsan yağmur %2$d dk\'ya iner.</string>
+    <string name="routine_switch_mode">Bugün %1$s daha iyi bir seçenek.</string>
+
+    <!-- ===== Rutinim (ekran) ===== -->
+    <string name="routine_title">Rutinim</string>
+    <string name="routine_route">%1$s → %2$s</string>
+    <string name="routine_schedule">%1$s · %2$s · %3$s</string>
+    <string name="routine_days_every">Her gün</string>
+    <string name="routine_days_weekdays">Hafta içi</string>
+    <string name="routine_days_weekend">Hafta sonu</string>
+    <string name="day_short_mon">Pzt</string>
+    <string name="day_short_tue">Sal</string>
+    <string name="day_short_wed">Çar</string>
+    <string name="day_short_thu">Per</string>
+    <string name="day_short_fri">Cum</string>
+    <string name="day_short_sat">Cmt</string>
+    <string name="day_short_sun">Paz</string>
+    <string name="routine_mode_question">Nasıl gidiyorsun?</string>
+    <string name="routine_days_question">Hangi günler?</string>
+    <string name="routine_time_question">Saat kaçta çıkıyorsun?</string>
+    <string name="routine_explainer">Her çıkıştan 30 dk önce bu yolun havasına bakarız. Sadece dikkat etmen gereken bir şey olursa bildirim gelir.</string>
+    <string name="routine_save">Kaydet</string>
+    <string name="routine_delete">Rutini sil</string>
+    <string name="routine_save_trip">Bu yolculuğu rutinim yap</string>
+    <string name="routine_save_trip_hint">Çıkıştan önce yağmur ya da yol riski varsa haber veririz.</string>
+    <string name="cd_routine_edit">Rutini düzenle</string>
+
+    <!-- ===== Widget ===== -->
+    <string name="widget_name">Hava+ · Yolculuk+</string>
+    <string name="widget_description">Hava, önümüzdeki saatler ve rutin yolculuğun tek bakışta</string>
+    <string name="widget_title">Hava+</string>
+    <string name="widget_trip_label">Yolculuk+</string>
+    <string name="widget_trip_routine">%1$s %2$s · %3$s</string>
+    <string name="widget_trip_clear">Yol temiz, iyi yolculuklar.</string>
+    <string name="widget_trip_dry">2 saat boyunca kuru: yola çıkmak için iyi.</string>
+    <string name="widget_unavailable">Hava bilgisi alınamadı. Açmak için dokun.</string>
+    <string name="widget_curve_cd">Önümüzdeki saatlerin sıcaklığı ve yağmur ihtimali</string>
+    <string name="temperature_value">%1$d°</string>
+</resources>

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Uygulamanın ana teması. Compose çizilene kadar pencere lacivert kalsın (beyaz parlama olmasın). -->
+    <style name="Theme.Hava" parent="android:Theme.Material.NoActionBar">
+        <item name="android:windowBackground">@color/hava_navy</item>
+    </style>
+
+    <!--
+      Açılış ekranı (SplashScreen API). Android 12 ve üstünde sistem bunu kendisi gösterir;
+      core-splashscreen kütüphanesi aynı görünümü eski sürümlere de taşır.
+    -->
+    <style name="Theme.Hava.Starting" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenBackground">@color/hava_navy</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/ic_launcher_foreground</item>
+        <item name="postSplashScreenTheme">@style/Theme.Hava</item>
+    </style>
+</resources>

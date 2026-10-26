@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Hava+ ikonu: ufuktan doğan güneş (hava) + ufka doğru daralan yol çizgileri (yolculuk) + "+".
+  Adaptive icon kuralı: her şey ortadaki 66dp'lik güvenli dairenin içinde kalıyor.
+-->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aapt="http://schemas.android.com/aapt"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <!-- Doğan güneş: ufkun üstünde kalan yarım daire -->
+    <path android:pathData="M38,62a16,16 0 0,1 32,0z">
+        <aapt:attr name="android:fillColor">
+            <gradient
+                android:type="linear"
+                android:startX="54"
+                android:startY="46"
+                android:endX="54"
+                android:endY="62">
+                <item android:offset="0" android:color="#FFFFE38A" />
+                <item android:offset="1" android:color="#FFFFB300" />
+            </gradient>
+        </aapt:attr>
+    </path>
+    <!-- Ufuk çizgisi -->
+    <path
+        android:fillColor="#E6FFFFFF"
+        android:pathData="M28.8,61.2h50.4a0.8,0.8 0 0,1 0,1.6h-50.4a0.8,0.8 0 0,1 0,-1.6z" />
+    <!-- Yol: uzaklaştıkça incelen ve sönen çizgiler -->
+    <path
+        android:fillColor="#59FFFFFF"
+        android:pathData="M36.6,67.4h34.8a0.6,0.6 0 0,1 0,1.2h-34.8a0.6,0.6 0 0,1 0,-1.2z" />
+    <path
+        android:fillColor="#2EFFFFFF"
+        android:pathData="M44.5,72.5h19a0.5,0.5 0 0,1 0,1h-19a0.5,0.5 0 0,1 0,-1z" />
+    <!-- Artı -->
+    <path
+        android:fillColor="#FFFFFFFF"
+        android:pathData="M70.8,34.8a1.2,1.2 0 0,1 2.4,0v3.8h3.8a1.2,1.2 0 0,1 0,2.4h-3.8v3.8a1.2,1.2 0 0,1 -2.4,0v-3.8h-3.8a1.2,1.2 0 0,1 0,-2.4h3.8z" />
+</vector>

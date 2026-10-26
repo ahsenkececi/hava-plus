@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Hava+ paleti (Compose tarafındaki Color.kt ile aynı değerler) -->
+    <color name="hava_navy">#FF0B1F4D</color>
+    <color name="hava_navy_deep">#FF06122E</color>
+    <color name="hava_yellow">#FFFFC900</color>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+</resources>

@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Konumun adı bulunamazsa (ters geocoding başarısız) kullanılan ad -->
+    <string name="location_fallback_name">Konumum</string>
+</resources>
