@@ -15,6 +15,10 @@ import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.ahsen.hava.domain.model.TravelMode
+import com.ahsen.hava.ui.theme.BikeCoral
+import com.ahsen.hava.ui.theme.CarLavender
+import com.ahsen.hava.ui.theme.TransitSky
+import com.ahsen.hava.ui.theme.WalkMint
 
 /**
  * Ulaşım ikonları: hava ikonlarıyla aynı ince çizgi dili.
@@ -87,4 +91,12 @@ fun TravelModeIcon(mode: TravelMode, modifier: Modifier = Modifier, size: Dp = 2
             }
         }
     }
+}
+
+/** Ulaşım türünün vurgu rengi (kart zemini, ikon, kenarlık). */
+fun TravelMode.accent(): Color = when (this) {
+    TravelMode.Walk -> WalkMint
+    TravelMode.Bike -> BikeCoral
+    TravelMode.Car -> CarLavender
+    TravelMode.Transit -> TransitSky
 }

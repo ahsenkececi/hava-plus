@@ -23,6 +23,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -32,6 +33,7 @@ import com.ahsen.hava.ui.common.departureMessageText
 import com.ahsen.hava.ui.common.departureOffsetText
 import com.ahsen.hava.ui.common.label
 import com.ahsen.hava.ui.component.GlassCard
+import com.ahsen.hava.ui.theme.CardSurface
 import com.ahsen.hava.ui.theme.CoolBlue
 import com.ahsen.hava.ui.theme.GlassBorder
 import com.ahsen.hava.ui.theme.GlassFill
@@ -48,7 +50,7 @@ import java.time.format.DateTimeFormatter
 @Composable
 internal fun DepartureCard(advice: DepartureAdvice, selectedOffset: Int, onSelect: (Int) -> Unit) {
     val clock = remember { DateTimeFormatter.ofPattern("HH:mm") }
-    GlassCard(modifier = Modifier.fillMaxWidth()) {
+    GlassCard(modifier = Modifier.fillMaxWidth(), fill = SolidColor(CardSurface)) {
         Row(verticalAlignment = Alignment.CenterVertically) {
             Text(
                 stringResource(R.string.departure_title),

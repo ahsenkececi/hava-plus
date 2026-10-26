@@ -30,6 +30,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -49,6 +50,7 @@ import com.ahsen.hava.ui.common.text
 import com.ahsen.hava.ui.common.uiText
 import com.ahsen.hava.ui.component.ErrorView
 import com.ahsen.hava.ui.component.GlassCard
+import com.ahsen.hava.ui.theme.CardSurface
 import com.ahsen.hava.ui.theme.CoolBlue
 import com.ahsen.hava.ui.theme.GlassBorder
 import com.ahsen.hava.ui.theme.GlassFill
@@ -128,7 +130,7 @@ internal fun RouteOptions(
 /** En üstte: önerilen seçenek ve "neden?" cümlesi. */
 @Composable
 private fun RecommendationCard(best: ModeOption, headline: String, departureOffset: Int) {
-    GlassCard(modifier = Modifier.fillMaxWidth(), borderColor = HavaYellow) {
+    GlassCard(modifier = Modifier.fillMaxWidth(), borderColor = HavaYellow, fill = SolidColor(CardSurface)) {
         Row(verticalAlignment = Alignment.CenterVertically) {
             Text(
                 stringResource(R.string.recommended_title),
@@ -168,19 +170,22 @@ private fun RecommendationCard(best: ModeOption, headline: String, departureOffs
 /** Bir seçenek: ikon, süre, puan, gerekçeler ve yol boyunca hava şeridi. */
 @Composable
 private fun OptionCard(option: ModeOption, isBest: Boolean, alternatives: Int, isWeatherLoading: Boolean) {
+    val accent = option.mode.accent()
+    // Opak, sade kart; tür sadece ikonun renginden ayırt edilir. En iyisi sarı kenarlıkla işaretli.
     GlassCard(
         modifier = Modifier.fillMaxWidth(),
-        borderColor = if (isBest) HavaYellow.copy(alpha = 0.5f) else GlassBorder,
+        borderColor = if (isBest) HavaYellow.copy(alpha = 0.7f) else GlassBorder,
+        fill = SolidColor(CardSurface),
     ) {
         Row(verticalAlignment = Alignment.CenterVertically) {
             Box(
                 modifier = Modifier
                     .size(44.dp)
                     .clip(CircleShape)
-                    .background(GlassFill),
+                    .background(accent.copy(alpha = 0.16f)),
                 contentAlignment = Alignment.Center,
             ) {
-                TravelModeIcon(mode = option.mode, size = 26.dp)
+                TravelModeIcon(mode = option.mode, size = 26.dp, color = accent)
             }
             Column(
                 modifier = Modifier

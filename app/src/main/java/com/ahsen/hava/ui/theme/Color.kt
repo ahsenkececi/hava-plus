@@ -18,3 +18,12 @@ val TextSecondary = Color(0xA6FFFFFF) // %65 beyaz
 // Vurgu dışı yardımcı renkler
 val CoolBlue = Color(0xFF8FC8FF)  // yağmur, soğuk
 val WarmOrange = Color(0xFFFFA463) // sıcak uç
+
+// Ulaşım türlerinin vurgu renkleri: Yolculuk+ kartları bir bakışta ayırt edilsin.
+val WalkMint = Color(0xFF6EE7B7)
+val BikeCoral = Color(0xFFFF8A65)
+val CarLavender = Color(0xFFB39DFF)
+val TransitSky = Color(0xFF7FD1FF)
+
+/** Yolculuk+ kartlarının zemini: saydam cam yerine opak, sakin bir yüzey (harita uygulamalarındaki gibi). */
+val CardSurface = Color(0xFF16233D)
