@@ -25,5 +25,8 @@ val BikeCoral = Color(0xFFFF8A65)
 val CarLavender = Color(0xFFB39DFF)
 val TransitSky = Color(0xFF7FD1FF)
 
-/** Yolculuk+ kartlarının zemini: saydam cam yerine opak, sakin bir yüzey (harita uygulamalarındaki gibi). */
-val CardSurface = Color(0xFF16233D)
+/**
+ * Bütün kartların ortak zemini: %85 opak koyu lacivert. Gökyüzü hafifçe sezilir ama
+ * metin her arka planda aynı netlikte okunur (tek kart sistemi).
+ */
+val CardSurface = Color(0xD916233D)
